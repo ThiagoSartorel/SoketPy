@@ -12,7 +12,10 @@ def recebeMsgThread(cliente):
         while True:
             try:
                 data = cliente.recv(4096).decode('utf-8') 
-                print(data+'\n')                
+                data_final = json.loads(data)
+                emitente = data_final.get("user")
+                mensagem = data_final.get("msg")
+                print(emitente +">>>"+ mensagem)                
             except:
                 # Valida conexão com o servidor, se der erro 
                 print('Falha ao conectar com o servidor! Digite x para continuar')
@@ -25,13 +28,13 @@ def enviaMsgThread(cliente, user):
         try:   
             #envia msg formatada  
             data = Mensagem()       
-            data.msg = input('\n')#input mensagem
+            data.msg = input('')#input mensagem
             #data.msg = user + ">>>" + data.msg
             data.user = user
             data.flag = "mensagem"
             data_string = json.dumps(data.__dict__, indent = 0)
             
-            print(data_string)
+            #print(data_string)
 
             #cliente.send(f'{user}>>> {data_string}'.encode('utf-8'))
             cliente.send(bytes(data_string,encoding="utf-8"))

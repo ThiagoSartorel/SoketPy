@@ -1,6 +1,6 @@
 from pydoc import cli
-import socket
-import threading
+import socket, json
+import threading 
 
 #array dos clientes conectados
 clients = []
@@ -9,6 +9,8 @@ def mensagemThread(cliente):
     while True:
         try:
             data = cliente.recv(4096)
+            data_json = json.loads(data)
+            print(data_json.get("user"))
             broadCast(data, cliente)
         except:
             delCliente(cliente)
