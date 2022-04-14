@@ -12,11 +12,11 @@ def mensagemThread(cliente):
             data_json = json.loads(data)
             if data_json.get("flag") == "NN":
                 NomeClients.append(data_json.get("user"))
-                print(NomeClients)
+                print(data_json.get("user") + " - Entrou")
             
             broadCast(data, cliente)
         except:
-            print(data_json.get("user"))
+            print(data_json.get("user") + " - Saiu")
             NomeClients.remove(data_json.get("user"))
             delCliente(cliente)
             break

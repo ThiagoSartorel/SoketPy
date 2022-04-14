@@ -57,6 +57,7 @@ def inicializaConexao(cliente):
         mensagem = Mensagem()
         mensagem.user = user
         mensagem.flag = "NN"
+        mensagem.msg = "entrou"
         mensagem_string = json.dumps(mensagem.__dict__, indent=0)
         cliente.send(bytes(mensagem_string, encoding="utf-8"))
         return user       
