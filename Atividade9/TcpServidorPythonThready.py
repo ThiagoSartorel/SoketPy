@@ -4,15 +4,20 @@ import threading
 
 #array dos clientes conectados
 clients = []
-
+NomeClients = []
 def mensagemThread(cliente):
     while True:
         try:
             data = cliente.recv(4096)
             data_json = json.loads(data)
-            print(data_json.get("user"))
+            if data_json.get("flag") == "NN":
+                NomeClients.append(data_json.get("user"))
+                print(NomeClients)
+            
             broadCast(data, cliente)
         except:
+            print(data_json.get("user"))
+            NomeClients.remove(data_json.get("user"))
             delCliente(cliente)
             break
 
@@ -24,10 +29,12 @@ def broadCast(data, cliente):
                 cadaClient.send(data)
             except:
                 delCliente(cadaClient)
+                
 
 #se o cliente ñ esta mais conectado exclui...
 def delCliente (cliente):
     clients.remove(cliente)
+    #NomeClients.remove(userName)
 
 def Main():
     #host = "127.0.0.1"

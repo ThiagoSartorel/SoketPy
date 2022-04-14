@@ -1,6 +1,10 @@
 import socket, json
 import threading
 
+from TcpServidorPythonThready import mensagemThread
+
+user = ''
+
 class Mensagem(object):
     def __init__(self):
         self.user = ""
@@ -42,27 +46,31 @@ def enviaMsgThread(cliente, user):
             return
 
 #inicializa a conexao
-def inicializaConexao():
-    cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def inicializaConexao(cliente):
+    
     try:
         # define o endereço e porta do servidor Cliente que é do serv de destino
-        cliente.connect(('127.0.0.1', 10000))  
+        cliente.connect(('127.0.0.1', 10000))
+        username = input ('Digite o nome do usuário: ')
+        print('\nAgora você está online, '+ username + '!\n') 
+        user = username
+        mensagem = Mensagem()
+        mensagem.user = user
+        mensagem.flag = "NN"
+        mensagem_string = json.dumps(mensagem.__dict__, indent=0)
+        cliente.send(bytes(mensagem_string, encoding="utf-8"))
+        return user       
     except:
         return print('\nSem conexão com o servidor!\n') 
-    return cliente
 
 def Main():
     # cria o socket TCP do cliente, abrindo uma porta alta (cliente objeto socket)
-    
-    cliente = inicializaConexao()
+    cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    clienteN = inicializaConexao(cliente)
 
-    #identificando quem esta enviando a mensagem....
-    username = input ('Digite o nome do usuário: ')
-    print('\nAgora você está online, '+ username + '!\n')    
-  
     #Threads
     t1 = threading.Thread(target=recebeMsgThread, args=[cliente])
-    t2 = threading.Thread(target=enviaMsgThread, args=[cliente, username])
+    t2 = threading.Thread(target=enviaMsgThread, args=[cliente, clienteN])
     #Inicia a thread
     t1.start()
     t2.start()
