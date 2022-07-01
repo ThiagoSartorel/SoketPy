@@ -1,0 +1,12 @@
+
+### Verbo POST – adicionar
+POST http://127.0.0.1:5000/user/4 HTTP/1.1
+content-type: application/json
+{
+"nome": "Coelho",
+"idade": 22
+}
+### Verbo POST – adicionar
+curl -X POST http://127.0.0.1:5000/user/6
+    -H 'Content-Type: application/json'
+    -d '{"nome":"Thiago","idade":20}'
